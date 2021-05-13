@@ -1,0 +1,13 @@
+type User @model {
+  id: ID!
+  name: String!
+  books: [Book] @connection(keyName: "byUser", fields: ["id"])
+}
+
+type Book @model @key(name: "byUser", fields: ["userID"]) {
+  id: ID!
+  title: String!
+  userID: ID!
+  isbn: String!
+  coverURL: String!
+}

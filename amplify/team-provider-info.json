@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-reactnativebooks-dev-204007-authRole",
+      "UnauthRoleArn": "arn:aws:iam::812753336504:role/amplify-reactnativebooks-dev-204007-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::812753336504:role/amplify-reactnativebooks-dev-204007-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-reactnativebooks-dev-204007-deployment",
+      "UnauthRoleName": "amplify-reactnativebooks-dev-204007-unauthRole",
+      "StackName": "amplify-reactnativebooks-dev-204007",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:812753336504:stack/amplify-reactnativebooks-dev-204007/fc20d0a0-b3df-11eb-aa20-06c816ec4d35",
+      "AmplifyAppId": "d1qb5km6k1xpsj"
+    }
+  }
+}
