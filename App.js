@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { View, StyleSheet, Button, FlatList } from "react-native";
 import Amplify from "aws-amplify";
 import config from "./src/aws-exports";
 import { NavigationContainer } from "@react-navigation/native";
 import Tabs from "./navigation/Tabs";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import {UserContextProvider} from "./contexts/UserContext";
 
 Amplify.configure(config);
 
 const App = () => {
-
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <Tabs />
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <UserContextProvider>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <Tabs />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </UserContextProvider>
   );
 };
 
