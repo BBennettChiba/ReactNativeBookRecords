@@ -1,41 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { Text, FlatList, View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { deleteBook } from "../src/graphql/mutations";
 import Book from "../components/Book";
-import {useUser, useUserUpdate} from '../contexts/UserContext'
+import { useUser, useUserUpdate } from "../contexts/UserContext";
+import BookInfo from '../components/BookInfo'
 
 export default function OwnedBooksScreen({ navigation }) {
   const me = { name: "Bryson", id: "c83d9cb1-aaf2-4fcd-8dd5-a38aab6ce485" };
   const [scanning, setScanning] = useState(false);
   const books = useUser(); // will be user later
   const booksUpdate = useUserUpdate();
-
-  async function removeBook(book) {
-    console.log(book);
-    try {
-      await API.graphql(
-        graphqlOperation(deleteBook, { input: { id: book.id } })
-      );
-      setBooks(books.filter((a) => a.id !== book.id));
-    } catch (e) {
-      console.log(`There was an error removing book `, e);
-    }
-  }
+  const [pressedBook, setPressedBook] = useState(null);
 
   return (
     <SafeAreaView>
-      <View style={styles.top}><Text style={{fontSize:20}}>Books You Own!</Text></View>
-      <FlatList
-        data={books}
-        // extraData={books}
-        renderItem={({ item }) => (
-          <View style={styles.bookBox}>
-            <Book book={item} key={item.id} />
-            
-          </View>
-        )}
-      />
+      {!pressedBook && <View>
+        <View style={styles.top}>
+          <Text style={{ fontSize: 20 }}>Books You Own!</Text>
+        </View>
+        <FlatList
+          data={books}
+          // extraData={books}
+          renderItem={({ item }) => (
+            <View style={styles.bookBox} >
+              <Book book={item} key={item.id} setPressedBook={setPressedBook}/>
+            </View>
+          )}
+        />
+      </View>}
+      {pressedBook && <BookInfo book={pressedBook} setPressedBook={setPressedBook}/>}
     </SafeAreaView>
   );
 }
@@ -48,8 +41,8 @@ const styles = StyleSheet.create({
   top: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 });
 /*<TextInput
         onChangeText={val => setInput('name', val)}

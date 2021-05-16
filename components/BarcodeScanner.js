@@ -5,11 +5,13 @@ import { API, graphqlOperation } from "aws-amplify";
 import { createBook } from "../src/graphql/mutations";
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
+import {useUser, useUserUpdate} from '../contexts/UserContext'
 
 
 export default function BarcodeScanner() {
+  const books = useUser();
+  const setBooks = useUserUpdate();
   const [hasPermission, setHasPermission] = useState(null);
-  const [books, setBooks] = useState([]);
   const [scanned, setScanned] = useState(false);
   const me = { name: "Bryson", id: "c83d9cb1-aaf2-4fcd-8dd5-a38aab6ce485" };
 
@@ -41,7 +43,6 @@ export default function BarcodeScanner() {
           `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
         )
       ).data.items[0];
-      console.log("return from google ", googleBooks);
     } catch (e) {
       alert(`ISBN not recognized, try manually inputting`);
       console.log(e);
@@ -55,6 +56,13 @@ export default function BarcodeScanner() {
       userID: me.id,
       isbn: isbn,
       coverURL: googleBooks.volumeInfo.imageLinks.thumbnail,
+      language: googleBooks.volumeInfo.language,
+      pageCount: googleBooks.volumeInfo.pageCount,
+      publisher: googleBooks.volumeInfo.publisher,
+      publishedDate: googleBooks.volumeInfo.publishedDate,
+      description: googleBooks.volumeInfo.description,
+      categories: googleBooks.volumeInfo.categories,
+      authors: googleBooks.volumeInfo.authors
     };
 
     try {

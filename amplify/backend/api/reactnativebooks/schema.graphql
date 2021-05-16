@@ -10,4 +10,11 @@ type Book @model @key(name: "byUser", fields: ["userID"]) {
   userID: ID!
   isbn: String!
   coverURL: String!
+  language: String
+  pageCount: Int
+  publisher: String
+  publishedDate: String
+  description: String
+  categories: [String]
+  authors: [String]
 }

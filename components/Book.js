@@ -1,8 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TextInput, Button, Image } from "react-native";
+import { View, Text, StyleSheet, Pressable, Image } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
+import { API, graphqlOperation } from "aws-amplify";
+import { deleteBook } from "../src/graphql/mutations";
+import { useUser, useUserUpdate } from "../contexts/UserContext";
 
-export default function Book({ book }) {
+export default function Book({ book, setPressedBook }) {
+  const books = useUser();
+  const setBooks = useUserUpdate();
+
+  async function removeBook(toDelete) {
+    try {
+      await API.graphql(
+        graphqlOperation(deleteBook, { input: { id: toDelete.id } })
+      );
+      setBooks(books.filter((a) => a.id !== toDelete.id));
+    } catch (e) {
+      console.log(`There was an error removing book `, e);
+    }
+  }
+
   return (
     <View style={styles.box}>
       <Image
@@ -10,17 +27,19 @@ export default function Book({ book }) {
         resizeMode="contain"
         source={{ uri: book.coverURL }}
       />
-      <View style={styles.details}>
-        <Text>Title: {book.title}</Text>
-        <Text>ISBN: {book.isbn}</Text>
-      </View>
+      <Pressable  onPress={() => setPressedBook(book)}>
+        <View style={styles.details}>
+          <Text>Title: {book.title}</Text>
+          <Text>Authors: {book.authors}</Text>
+        </View>
+      </Pressable>
       <Icon
         style={styles.icon}
         name="delete"
         size={30}
         color="#e33057"
         onPress={() => {
-          removeBook(item);
+          removeBook(book);
         }}
       />
     </View>
@@ -38,7 +57,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "blue",
     padding: 5,
     flexDirection: "row",
-    alignItems: 'center'
+    alignItems: "center",
   },
   details: {
     paddingLeft: 5,
@@ -47,6 +66,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     position: "absolute",
-    right: 5
+    right: 5,
   },
 });

@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-// books.map((book, index) => <Book book={book} key={book.id} />)
 /* <TextInput
         onChangeText={val => setInput('name', val)}
         style={styles.input}
@@ -54,46 +53,3 @@ export default App;
       />
       <Button title="Create Book" onPress={addBook} /> */
 
-/*(
-    <SafeAreaView style={styles.container}>
-      {scanning && (
-        <BarcodeScanner
-          scanning={scanning}
-          setScanning={setScanning}
-          books={books}
-          setBooks={setBooks}
-        />
-      )}
-      {!scanning && (
-        <FlatList
-          style={{ flex: 5 }}
-          data={books}
-          // extraData={books}
-          renderItem={({ item }) => (
-            <View style={styles.bookBox}>
-              <Book book={item} key={item.id} />
-              <Icon
-                name="delete"
-                size={30}
-                color="#e33057"
-                onPress={() => {
-                  removeBook(item);
-                }}
-              />
-            </View>
-          )}
-        />
-      )}
-      {!scanning && (
-        <View>
-          <Button
-            style={styles.button}
-            title="Scan New Book"
-            onPress={() => {
-              setScanning(!scanning);
-            }}
-          />
-        </View>
-      )}
-    </SafeAreaView>
-  )*/

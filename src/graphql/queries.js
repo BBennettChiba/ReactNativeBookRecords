@@ -13,6 +13,13 @@ export const getUser = /* GraphQL */ `
           userID
           isbn
           coverURL
+          language
+          pageCount
+          publisher
+          publishedDate
+          description
+          categories
+          authors
           createdAt
           updatedAt
         }
@@ -51,6 +58,13 @@ export const getBook = /* GraphQL */ `
       userID
       isbn
       coverURL
+      language
+      pageCount
+      publisher
+      publishedDate
+      description
+      categories
+      authors
       createdAt
       updatedAt
     }
@@ -69,6 +83,13 @@ export const listBooks = /* GraphQL */ `
         userID
         isbn
         coverURL
+        language
+        pageCount
+        publisher
+        publishedDate
+        description
+        categories
+        authors
         createdAt
         updatedAt
       }

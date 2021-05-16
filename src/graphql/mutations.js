@@ -16,6 +16,13 @@ export const createUser = /* GraphQL */ `
           userID
           isbn
           coverURL
+          language
+          pageCount
+          publisher
+          publishedDate
+          description
+          categories
+          authors
           createdAt
           updatedAt
         }
@@ -41,6 +48,13 @@ export const updateUser = /* GraphQL */ `
           userID
           isbn
           coverURL
+          language
+          pageCount
+          publisher
+          publishedDate
+          description
+          categories
+          authors
           createdAt
           updatedAt
         }
@@ -66,6 +80,13 @@ export const deleteUser = /* GraphQL */ `
           userID
           isbn
           coverURL
+          language
+          pageCount
+          publisher
+          publishedDate
+          description
+          categories
+          authors
           createdAt
           updatedAt
         }
@@ -87,6 +108,13 @@ export const createBook = /* GraphQL */ `
       userID
       isbn
       coverURL
+      language
+      pageCount
+      publisher
+      publishedDate
+      description
+      categories
+      authors
       createdAt
       updatedAt
     }
@@ -103,6 +131,13 @@ export const updateBook = /* GraphQL */ `
       userID
       isbn
       coverURL
+      language
+      pageCount
+      publisher
+      publishedDate
+      description
+      categories
+      authors
       createdAt
       updatedAt
     }
@@ -119,6 +154,13 @@ export const deleteBook = /* GraphQL */ `
       userID
       isbn
       coverURL
+      language
+      pageCount
+      publisher
+      publishedDate
+      description
+      categories
+      authors
       createdAt
       updatedAt
     }
