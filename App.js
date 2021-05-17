@@ -39,17 +39,4 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-/* <TextInput
-        onChangeText={val => setInput('name', val)}
-        style={styles.input}
-        value={formState.name}
-        placeholder="name"
-      />
-      <TextInput
-        onChangeText={val => setInput('isbn', val)}
-        style={styles.input}
-        value={formState.description}
-        placeholder="ISBN"
-      />
-      <Button title="Create Book" onPress={addBook} /> */
 

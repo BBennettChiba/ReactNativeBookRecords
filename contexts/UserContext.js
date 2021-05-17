@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { listBooks } from "../src/graphql/queries";
+import { getUser } from "../src/graphql/queries";
 import { API, graphqlOperation } from "aws-amplify";
 
 const UserContext = createContext(null);
@@ -16,7 +16,6 @@ export function UserContextProvider({ children }) {
   const me = { name: "Bryson", id: "c83d9cb1-aaf2-4fcd-8dd5-a38aab6ce485" };
   const [user, setUser] = useState({});
   const [books, setBooks] = useState([]);
-  const filter = { filter: { userID: { eq: me.id } } };
 
   useEffect(() => {
     fetchBooks();
@@ -24,9 +23,10 @@ export function UserContextProvider({ children }) {
 
   async function fetchBooks() {
     try {
-      let bookData = await API.graphql(graphqlOperation(listBooks), filter);
-      bookData = bookData.data.listBooks.items;
-      setBooks(bookData);
+      let userData = await API.graphql(graphqlOperation(getUser, {id:me.id}));
+      console.log(userData)
+      userData = userData.data.getUser;
+      setBooks(userData.ownedBooks.items);
     } catch (err) {
       console.log("error fetching books", err);
     }

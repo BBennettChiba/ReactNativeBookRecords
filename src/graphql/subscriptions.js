@@ -6,7 +6,26 @@ export const onCreateUser = /* GraphQL */ `
     onCreateUser {
       id
       name
-      books {
+      ownedBooks {
+        items {
+          id
+          title
+          userID
+          isbn
+          coverURL
+          language
+          pageCount
+          publisher
+          publishedDate
+          description
+          categories
+          authors
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      booksToRead {
         items {
           id
           title
@@ -35,7 +54,26 @@ export const onUpdateUser = /* GraphQL */ `
     onUpdateUser {
       id
       name
-      books {
+      ownedBooks {
+        items {
+          id
+          title
+          userID
+          isbn
+          coverURL
+          language
+          pageCount
+          publisher
+          publishedDate
+          description
+          categories
+          authors
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      booksToRead {
         items {
           id
           title
@@ -64,7 +102,26 @@ export const onDeleteUser = /* GraphQL */ `
     onDeleteUser {
       id
       name
-      books {
+      ownedBooks {
+        items {
+          id
+          title
+          userID
+          isbn
+          coverURL
+          language
+          pageCount
+          publisher
+          publishedDate
+          description
+          categories
+          authors
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      booksToRead {
         items {
           id
           title
@@ -88,9 +145,9 @@ export const onDeleteUser = /* GraphQL */ `
     }
   }
 `;
-export const onCreateBook = /* GraphQL */ `
-  subscription OnCreateBook {
-    onCreateBook {
+export const onCreateOwnedBook = /* GraphQL */ `
+  subscription OnCreateOwnedBook {
+    onCreateOwnedBook {
       id
       title
       userID
@@ -108,9 +165,9 @@ export const onCreateBook = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateBook = /* GraphQL */ `
-  subscription OnUpdateBook {
-    onUpdateBook {
+export const onUpdateOwnedBook = /* GraphQL */ `
+  subscription OnUpdateOwnedBook {
+    onUpdateOwnedBook {
       id
       title
       userID
@@ -128,9 +185,69 @@ export const onUpdateBook = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteBook = /* GraphQL */ `
-  subscription OnDeleteBook {
-    onDeleteBook {
+export const onDeleteOwnedBook = /* GraphQL */ `
+  subscription OnDeleteOwnedBook {
+    onDeleteOwnedBook {
+      id
+      title
+      userID
+      isbn
+      coverURL
+      language
+      pageCount
+      publisher
+      publishedDate
+      description
+      categories
+      authors
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateBookToRead = /* GraphQL */ `
+  subscription OnCreateBookToRead {
+    onCreateBookToRead {
+      id
+      title
+      userID
+      isbn
+      coverURL
+      language
+      pageCount
+      publisher
+      publishedDate
+      description
+      categories
+      authors
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateBookToRead = /* GraphQL */ `
+  subscription OnUpdateBookToRead {
+    onUpdateBookToRead {
+      id
+      title
+      userID
+      isbn
+      coverURL
+      language
+      pageCount
+      publisher
+      publishedDate
+      description
+      categories
+      authors
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteBookToRead = /* GraphQL */ `
+  subscription OnDeleteBookToRead {
+    onDeleteBookToRead {
       id
       title
       userID

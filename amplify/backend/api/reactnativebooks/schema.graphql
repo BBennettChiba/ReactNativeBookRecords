@@ -1,10 +1,26 @@
 type User @model {
   id: ID!
   name: String!
-  books: [Book] @connection(keyName: "byUser", fields: ["id"])
+  ownedBooks: [OwnedBook] @connection(keyName: "byUser", fields: ["id"])
+  booksToRead: [BookToRead] @connection(keyName: "byUser", fields: ["id"])
 }
 
-type Book @model @key(name: "byUser", fields: ["userID"]) {
+type OwnedBook @model @key(name: "byUser", fields: ["userID"]) {
+  id: ID!
+  title: String!
+  userID: ID!
+  isbn: String!
+  coverURL: String!
+  language: String
+  pageCount: Int
+  publisher: String
+  publishedDate: String
+  description: String
+  categories: [String]
+  authors: [String]
+}
+
+type BookToRead @model @key(name: "byUser", fields: ["userID"]) {
   id: ID!
   title: String!
   userID: ID!

@@ -6,7 +6,26 @@ export const getUser = /* GraphQL */ `
     getUser(id: $id) {
       id
       name
-      books {
+      ownedBooks {
+        items {
+          id
+          title
+          userID
+          isbn
+          coverURL
+          language
+          pageCount
+          publisher
+          publishedDate
+          description
+          categories
+          authors
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      booksToRead {
         items {
           id
           title
@@ -40,7 +59,10 @@ export const listUsers = /* GraphQL */ `
       items {
         id
         name
-        books {
+        ownedBooks {
+          nextToken
+        }
+        booksToRead {
           nextToken
         }
         createdAt
@@ -50,9 +72,9 @@ export const listUsers = /* GraphQL */ `
     }
   }
 `;
-export const getBook = /* GraphQL */ `
-  query GetBook($id: ID!) {
-    getBook(id: $id) {
+export const getOwnedBook = /* GraphQL */ `
+  query GetOwnedBook($id: ID!) {
+    getOwnedBook(id: $id) {
       id
       title
       userID
@@ -70,13 +92,60 @@ export const getBook = /* GraphQL */ `
     }
   }
 `;
-export const listBooks = /* GraphQL */ `
-  query ListBooks(
-    $filter: ModelBookFilterInput
+export const listOwnedBooks = /* GraphQL */ `
+  query ListOwnedBooks(
+    $filter: ModelOwnedBookFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listBooks(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listOwnedBooks(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        userID
+        isbn
+        coverURL
+        language
+        pageCount
+        publisher
+        publishedDate
+        description
+        categories
+        authors
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getBookToRead = /* GraphQL */ `
+  query GetBookToRead($id: ID!) {
+    getBookToRead(id: $id) {
+      id
+      title
+      userID
+      isbn
+      coverURL
+      language
+      pageCount
+      publisher
+      publishedDate
+      description
+      categories
+      authors
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listBookToReads = /* GraphQL */ `
+  query ListBookToReads(
+    $filter: ModelBookToReadFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listBookToReads(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         title

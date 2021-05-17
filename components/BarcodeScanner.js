@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, Button, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { API, graphqlOperation } from "aws-amplify";
-import { createBook } from "../src/graphql/mutations";
+import { createOwnedBook } from "../src/graphql/mutations";
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {useUser, useUserUpdate} from '../contexts/UserContext'
@@ -67,9 +67,9 @@ export default function BarcodeScanner() {
 
     try {
       const newBook = await API.graphql(
-        graphqlOperation(createBook, { input: book })
+        graphqlOperation(createOwnedBook, { input: book })
       );
-      setBooks([...books, newBook.data.createBook]);
+      setBooks([...books, newBook.data.createOwnedBook]);
     } catch (err) {
       console.log("error creating book:", err);
     }
