@@ -15,7 +15,6 @@ export function useUserUpdate() {
 export function UserContextProvider({ children }) {
   const me = { name: "Bryson", id: "c83d9cb1-aaf2-4fcd-8dd5-a38aab6ce485" };
   const [user, setUser] = useState({});
-  const [books, setBooks] = useState([]);
 
   useEffect(() => {
     fetchBooks();
@@ -24,17 +23,16 @@ export function UserContextProvider({ children }) {
   async function fetchBooks() {
     try {
       let userData = await API.graphql(graphqlOperation(getUser, {id:me.id}));
-      console.log(userData)
       userData = userData.data.getUser;
-      setBooks(userData.ownedBooks.items);
+      setUser(userData)
     } catch (err) {
       console.log("error fetching books", err);
     }
   }
 
   return (
-    <UserContext.Provider value={books}>
-      <UserContextUpdate.Provider value={setBooks}>
+    <UserContext.Provider value={user}>
+      <UserContextUpdate.Provider value={setUser} >
         {children}
       </UserContextUpdate.Provider>
     </UserContext.Provider>

@@ -2,19 +2,20 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Pressable, Image } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import { API, graphqlOperation } from "aws-amplify";
-import { deleteBook } from "../src/graphql/mutations";
+import { deleteOwnedBook } from "../src/graphql/mutations";
 import { useUser, useUserUpdate } from "../contexts/UserContext";
 
 export default function Book({ book, setPressedBook }) {
-  const books = useUser();
-  const setBooks = useUserUpdate();
+  const user = useUser();
+  const books = user.ownedBooks.items
+  const setUser = useUserUpdate();
 
   async function removeBook(toDelete) {
     try {
       await API.graphql(
-        graphqlOperation(deleteBook, { input: { id: toDelete.id } })
+        graphqlOperation(deleteOwnedBook, { input: { id: toDelete.id } })
       );
-      setBooks(books.filter((a) => a.id !== toDelete.id));
+      setUser({...user, ownedBooks:books.filter((a) => a.id !== toDelete.id)});
     } catch (e) {
       console.log(`There was an error removing book `, e);
     }

@@ -5,15 +5,14 @@ import { API, graphqlOperation } from "aws-amplify";
 import { createOwnedBook } from "../src/graphql/mutations";
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {useUser, useUserUpdate} from '../contexts/UserContext'
-
+import { useUser, useUserUpdate } from "../contexts/UserContext";
 
 export default function BarcodeScanner() {
-  const books = useUser();
-  const setBooks = useUserUpdate();
+  const user = useUser();
+  const books = user.ownedBooks.items;
+  const setUser = useUserUpdate();
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const me = { name: "Bryson", id: "c83d9cb1-aaf2-4fcd-8dd5-a38aab6ce485" };
 
   useEffect(() => {
     (async () => {
@@ -53,7 +52,7 @@ export default function BarcodeScanner() {
       : googleBooks.volumeInfo.title;
     const book = {
       title,
-      userID: me.id,
+      userID: user.id,
       isbn: isbn,
       coverURL: googleBooks.volumeInfo.imageLinks.thumbnail,
       language: googleBooks.volumeInfo.language,
@@ -62,14 +61,17 @@ export default function BarcodeScanner() {
       publishedDate: googleBooks.volumeInfo.publishedDate,
       description: googleBooks.volumeInfo.description,
       categories: googleBooks.volumeInfo.categories,
-      authors: googleBooks.volumeInfo.authors
+      authors: googleBooks.volumeInfo.authors,
     };
 
     try {
       const newBook = await API.graphql(
         graphqlOperation(createOwnedBook, { input: book })
       );
-      setBooks([...books, newBook.data.createOwnedBook]);
+      setUser({
+        ...user,
+        ownedBooks: { items: [...books, newBook.data.createOwnedBook] },
+      });
     } catch (err) {
       console.log("error creating book:", err);
     }
@@ -89,7 +91,7 @@ export default function BarcodeScanner() {
 const styles = {
   container: {
     flex: 1,
-    margin: 25
+    margin: 25,
   },
   button: { flex: 1 },
 };

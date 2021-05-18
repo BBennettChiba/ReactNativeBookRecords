@@ -8,8 +8,8 @@ import BookInfo from '../components/BookInfo'
 export default function OwnedBooksScreen({ navigation }) {
   const me = { name: "Bryson", id: "c83d9cb1-aaf2-4fcd-8dd5-a38aab6ce485" };
   const [scanning, setScanning] = useState(false);
-  const books = useUser(); // will be user later
-  const booksUpdate = useUserUpdate();
+  const user = useUser()
+  const books = user.ownedBooks?.items;
   const [pressedBook, setPressedBook] = useState(null);
 
   return (

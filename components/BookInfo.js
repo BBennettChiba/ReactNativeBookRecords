@@ -14,12 +14,13 @@ export default function BookInfo({ book, setPressedBook }) {
           source={{ uri: book.coverURL }}
         />
       </View>
+      <Text style={styles.text}>Author(s): {book.authors.join(', ')}</Text>
       <Text style={styles.text}>ISBN: {book.isbn}</Text>
       <Text style={styles.text}>Language: {book.language}</Text>
       <Text style={styles.text}>Page Count: {book.pageCount}</Text>
       <Text style={styles.text}>Published Date: {book.publishedDate}</Text>
       <Text style={styles.text}>Publisher: {book.publisher}</Text>
-      <Text style={styles.text}>Description: {book.description}</Text>
+      <Text style={styles.text} numberOfLines={12}>Description: {book.description}</Text>
       <Button title="Close" onPress={() => setPressedBook(null)} />
     </View>
   );
@@ -48,6 +49,6 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
   text:{
-    fontSize: 20
+    fontSize: 17
   }
 });
