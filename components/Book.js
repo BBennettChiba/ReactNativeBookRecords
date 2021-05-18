@@ -48,14 +48,12 @@ export default function Book({ book, setPressedBook }) {
 }
 const styles = StyleSheet.create({
   image: {
-    // backgroundColor: "yellow",
     width: 40,
     height: 60,
     resizeMode: "contain",
   },
   box: {
     flex: 1,
-    // backgroundColor: "blue",
     padding: 5,
     flexDirection: "row",
     alignItems: "center",
@@ -63,7 +61,6 @@ const styles = StyleSheet.create({
   details: {
     paddingLeft: 5,
     flex: 1,
-    // backgroundColor: "green",
   },
   icon: {
     position: "absolute",

@@ -4,8 +4,8 @@ import Amplify from "aws-amplify";
 import config from "./src/aws-exports";
 import { NavigationContainer } from "@react-navigation/native";
 import Tabs from "./navigation/Tabs";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import {UserContextProvider} from "./contexts/UserContext";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { UserContextProvider } from "./contexts/UserContext";
 
 Amplify.configure(config);
 
@@ -39,4 +39,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-

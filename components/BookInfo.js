@@ -28,16 +28,13 @@ export default function BookInfo({ book, setPressedBook }) {
 
 const styles = StyleSheet.create({
   button: {
-    // flex: 1,
     position:"absolute",
     bottom: 0,
   },
   main: {
-    //   flex:10,
     borderRadius: 10,
     margin: 10,
     padding: 5,
-    backgroundColor: "purple",
   },
   title: {
     alignSelf: "center",

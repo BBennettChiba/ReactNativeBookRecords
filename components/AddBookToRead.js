@@ -1,27 +1,14 @@
 import React, { useState, useCallback } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  FlatList,
-  Pressable,
-  Image,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput, FlatList } from "react-native";
 import Checkbox from "expo-checkbox";
 import BookInfo from "./BookInfo";
-import Icon from "react-native-vector-icons/AntDesign";
-import { createBookToRead } from "../src/graphql/mutations";
-import { API, graphqlOperation } from "aws-amplify";
-import { useUser, useUserUpdate } from "../contexts/UserContext";
+import SearchResults from "./SearchResults";
 
 export default function AddBookToRead() {
-  const [searchByTitle, setSearchByTitle] = useState(false);
+  const [searchByTitle, setSearchByTitle] = useState(true);
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [pressedBook, setPressedBook] = useState(null);
-  const user = useUser();
-  const userUpdate = useUserUpdate();
 
   function debounce(func, wait) {
     let timeout;
@@ -36,9 +23,12 @@ export default function AddBookToRead() {
   }
 
   const debouncedFetch = useCallback(
-    debounce(async (val) => {
+    debounce(async (val, search) => {
+      let searchParam = search ? "intitle:" : "inauthor:";
       val = val.toLowerCase();
-      await fetch(`https://www.googleapis.com/books/v1/volumes?q=${val}`)
+      await fetch(
+        `https://www.googleapis.com/books/v1/volumes?q=${searchParam}${val}`
+      )
         .then((res) => res.json())
         .then((result) => {
           result = result.items.filter(
@@ -70,51 +60,13 @@ export default function AddBookToRead() {
     []
   );
 
-  function bookSearch(val) {
+  function bookSearch(val, search) {
     setSearchValue(val);
     if (val === "" || val.replace(/\s/g, "") === "") {
       setSearchResult([]);
       return;
     }
-    debouncedFetch(val);
-  }
-
-  function renderedSearchResults({ item }) {
-    return (
-      <View style={{ flexDirection: "row", padding: 5, flex: 1 }}>
-        <Pressable
-          style={{ flexDirection: "row", flex: 5 }}
-          onPress={() => setPressedBook(item)}
-        >
-          <Image style={styles.book} source={{ uri: item.coverURL }}></Image>
-
-          <View style={styles.details}>
-            <Text>Title: {item.title}</Text>
-            <Text numberOfLines={2}>Author: {item.authors.join(", ")}</Text>
-          </View>
-        </Pressable>
-        <Pressable
-          style={{ justifyContent: "center", paddingRight: 5 }}
-          onPress={() => handleAddBook(item)}
-        >
-          <Icon name="pluscircleo" size={20} />
-        </Pressable>
-      </View>
-    );
-  }
-
-  async function handleAddBook(book) {
-    let newBook = await API.graphql(
-      graphqlOperation(createBookToRead, {
-        input: { ...book, userID: user.id },
-      })
-    );
-    userUpdate({
-      ...user,
-      booksToRead: {
-        items: [...user.booksToRead.items, newBook.data.createBookToRead],
-      },
-    });
+    debouncedFetch(val, search);
   }
 
   return (
@@ -126,21 +78,25 @@ export default function AddBookToRead() {
               <View style={styles.checkbox}>
                 <Checkbox
                   value={searchByTitle}
-                  onValueChange={() => setSearchByTitle(true)}
+                  onChange={() => {
+                    setSearchByTitle(true);
+                  }}
                 />
                 <Text>Search by Title</Text>
               </View>
               <View style={styles.checkbox}>
                 <Checkbox
                   value={!searchByTitle}
-                  onValueChange={() => setSearchByTitle(false)}
+                  onChange={() => {
+                    setSearchByTitle(false);
+                  }}
                 />
                 <Text>Search by Author</Text>
               </View>
             </View>
             <View style={styles.inputBox}>
               <TextInput
-                onChangeText={(val) => bookSearch(val)}
+                onChangeText={(val) => bookSearch(val, searchByTitle)}
                 style={styles.input}
                 value={searchValue}
                 placeholder={
@@ -153,7 +109,9 @@ export default function AddBookToRead() {
           </View>
           <FlatList
             data={searchResult.length > 0 ? searchResult : []}
-            renderItem={renderedSearchResults}
+            renderItem={({ item }) => (
+              <SearchResults item={item} setPressedBook={setPressedBook} />
+            )}
             keyExtractor={(item, index) => index.toString()}
           />
         </View>
@@ -168,11 +126,9 @@ export default function AddBookToRead() {
 const styles = StyleSheet.create({
   checkboxBox: {
     flexDirection: "column",
-    backgroundColor: "pink",
   },
   checkbox: {
     flexDirection: "row",
-    backgroundColor: "red",
     alignItems: "center",
     margin: 0,
   },
@@ -182,15 +138,6 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     flex: 1,
-    backgroundColor: "purple",
     alignItems: "center",
-  },
-  book: {
-    width: 40,
-    height: 60,
-  },
-  details: {
-    paddingLeft: 5,
-    flex: 5,
   },
 });
