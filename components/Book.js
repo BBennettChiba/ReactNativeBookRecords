@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
   },
   details: {
     paddingLeft: 5,
+    paddingRight: 26,
     flex: 1,
   }
 });

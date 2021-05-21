@@ -4,9 +4,9 @@ import Book from "./Book";
 import Icon from "react-native-vector-icons/AntDesign";
 
 export default function BookList({ books, setPressedBook, removeBook }) {
-
   return (
     <FlatList
+      contentContainerStyle={{ paddingBottom: 50 }}
       data={books}
       renderItem={({ item }) => (
         <View style={styles.bookBox}>
@@ -29,9 +29,13 @@ export default function BookList({ books, setPressedBook, removeBook }) {
 const styles = StyleSheet.create({
   bookBox: {
     flexDirection: "row",
+    backgroundColor: "pink",
   },
   icon: {
-    position: "absolute",
     right: 5,
+    alignSelf:"center"
+  },
+  container: {
+    marginBottom: 20,
   },
 });

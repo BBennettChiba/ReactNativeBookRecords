@@ -35,7 +35,6 @@ export default function BarcodeScanner() {
   }
 
   async function bookFetch(isbn) {
-    // rewrite this to get google description and language
     let book;
     let google;
     let openLibrary;
@@ -46,7 +45,7 @@ export default function BarcodeScanner() {
         )
       ).data.items[0];
       let title = google.volumeInfo.subtitle
-        ? `${google.volumeInfo.title} ${google.volumeInfo.subtitle}`
+        ? `${google.volumeInfo.title}: ${google.volumeInfo.subtitle}`
         : google.volumeInfo.title;
       openLibrary = (
         await axios.get(

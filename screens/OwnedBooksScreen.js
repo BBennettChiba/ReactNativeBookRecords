@@ -29,7 +29,7 @@ export default function OwnedBooksScreen({ navigation }) {
 
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex:1}}>
       {!pressedBook && <View>
         <View style={styles.top}>
           <Text style={{ fontSize: 20 }}>Books You Own!</Text>
