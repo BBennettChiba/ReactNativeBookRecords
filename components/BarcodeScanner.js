@@ -34,36 +34,60 @@ export default function BarcodeScanner() {
     return <Text>No access to camera</Text>;
   }
 
-  async function addBook(isbn) {
-    let googleBooks;
+  async function bookFetch(isbn) {
+    // rewrite this to get google description and language
+    let book;
+    let google;
+    let openLibrary;
     try {
-      googleBooks = (
+      google = (
         await axios.get(
           `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
         )
       ).data.items[0];
+      let title = google.volumeInfo.subtitle
+        ? `${google.volumeInfo.title} ${google.volumeInfo.subtitle}`
+        : google.volumeInfo.title;
+      openLibrary = (
+        await axios.get(
+          `https://openlibrary.org/api/books?&bibkeys=ISBN:${isbn}&jscmd=data&format=json`
+        )
+      ).data[`ISBN:${isbn}`];
+      console.log('open Library ', openLibrary)
+      console.log('google ', google)
+      book = {
+        title: title || openLibrary.title,
+        userID: user.id,
+        isbn: isbn,
+        coverURL:
+          google.volumeInfo.imageLinks.thumbnail || openLibrary.cover.medium,
+        language: google.volumeInfo.language || "N/A",
+        pageCount: google.volumeInfo.pageCount || openLibrary.number_of_pages,
+        publisher:
+          openLibrary.publishers.map((a) => a.name).join(", ") ||
+          google.volumeInfo.publisher,
+        publishedDate: google.volumeInfo.publishedDate || openLibrary.publish_date,
+        description: google.volumeInfo.description || "N/A",
+        categories:
+          openLibrary.subjects.map((a) => a.name).join(", ") ||
+          google.volumeInfo.categories,
+        authors:
+          google.volumeInfo.authors || openLibrary.authors.map((a) => a.name),
+      };
+      console.log(book)
     } catch (e) {
       alert(`ISBN not recognized, try manually inputting`);
-      console.log(e);
       return;
     }
-    let title = googleBooks.volumeInfo.subtitle
-      ? `${googleBooks.volumeInfo.title} ${googleBooks.volumeInfo.subtitle}`
-      : googleBooks.volumeInfo.title;
-    const book = {
-      title,
-      userID: user.id,
-      isbn: isbn,
-      coverURL: googleBooks.volumeInfo.imageLinks.thumbnail,
-      language: googleBooks.volumeInfo.language,
-      pageCount: googleBooks.volumeInfo.pageCount,
-      publisher: googleBooks.volumeInfo.publisher,
-      publishedDate: googleBooks.volumeInfo.publishedDate,
-      description: googleBooks.volumeInfo.description,
-      categories: googleBooks.volumeInfo.categories,
-      authors: googleBooks.volumeInfo.authors,
-    };
+    return book;
+  }
 
+  async function addBook(isbn) {
+    let book = await bookFetch(isbn);
+    if(book === undefined) {
+      setScanned(false)
+      return;
+    }
     try {
       const newBook = await API.graphql(
         graphqlOperation(createOwnedBook, { input: book })
@@ -75,6 +99,7 @@ export default function BarcodeScanner() {
     } catch (err) {
       console.log("error creating book:", err);
     }
+    setScanned(false)
   }
 
   return (
@@ -95,7 +120,3 @@ const styles = {
   },
   button: { flex: 1 },
 };
-
-// {scanned && (
-//   <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
-// )}
