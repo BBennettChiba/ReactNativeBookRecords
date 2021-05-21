@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Button, StyleSheet } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { API, graphqlOperation } from "aws-amplify";
 import { createOwnedBook } from "../src/graphql/mutations";
@@ -53,8 +53,6 @@ export default function BarcodeScanner() {
           `https://openlibrary.org/api/books?&bibkeys=ISBN:${isbn}&jscmd=data&format=json`
         )
       ).data[`ISBN:${isbn}`];
-      console.log('open Library ', openLibrary)
-      console.log('google ', google)
       book = {
         title: title || openLibrary.title,
         userID: user.id,
@@ -74,7 +72,6 @@ export default function BarcodeScanner() {
         authors:
           google.volumeInfo.authors || openLibrary.authors.map((a) => a.name),
       };
-      console.log(book)
     } catch (e) {
       alert(`ISBN not recognized, try manually inputting`);
       return;

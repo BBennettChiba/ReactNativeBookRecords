@@ -1,14 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { Text, FlatList, View, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { Text, View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useUser } from "../contexts/UserContext";
+import { useUser, useUserUpdate } from "../contexts/UserContext";
 import BookInfo from '../components/BookInfo';
 import BookList from '../components/BookList'
+import { API, graphqlOperation } from "aws-amplify";
+import {deleteOwnedBook} from '../src/graphql/mutations'
 
 export default function OwnedBooksScreen({ navigation }) {
   const user = useUser()
-  const books = user.ownedBooks?.items;
+  const setUser = useUserUpdate()
   const [pressedBook, setPressedBook] = useState(null);
+
+  async function removeBook(toDelete) {
+    try {
+      await API.graphql(
+        graphqlOperation(deleteOwnedBook, { input: { id: toDelete.id } })
+      );
+      let updated = user.ownedBooks.items.filter((a) => a.id !== toDelete.id);
+      setUser((prev) => ({
+        ...prev,
+        ownedBooks: { items: updated },
+      }));
+    } catch (e) {
+      console.log(`There was an error removing book `, e);
+    }
+  }
+
 
   return (
     <SafeAreaView>
@@ -16,7 +34,7 @@ export default function OwnedBooksScreen({ navigation }) {
         <View style={styles.top}>
           <Text style={{ fontSize: 20 }}>Books You Own!</Text>
         </View>
-        <BookList books={books} setPressedBook={setPressedBook}/>
+        <BookList books={user.ownedBooks?.items} setPressedBook={setPressedBook} removeBook={removeBook}/>
       </View>}
       {pressedBook && <BookInfo book={pressedBook} setPressedBook={setPressedBook}/>}
     </SafeAreaView>
