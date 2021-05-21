@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bookBox: {
-    backgroundColor: "pink",
     flexDirection: "row",
   },
 });

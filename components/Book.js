@@ -12,7 +12,7 @@ export default function Book({ book, setPressedBook }) {
       <Pressable onPress={() => setPressedBook(book)}>
         <View style={styles.details}>
           <Text>Title: {book.title}</Text>
-          <Text>Authors: {book.authors}</Text>
+          <Text>Authors: {book.authors.join(', ')}</Text>
         </View>
       </Pressable>
     </View>

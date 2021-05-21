@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingBottom: 45,
     height: 100,
-    backgroundColor: "pink",
   },
   title: {
     alignSelf: "center",

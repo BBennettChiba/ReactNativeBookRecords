@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { StyleSheet} from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ScanBookScreen from "../screens/ScanBookScreen";
 import OwnedBooksScreen from "../screens/OwnedBooksScreen";
@@ -15,7 +15,7 @@ export default function Tabs() {
       <Tab.Screen
         options={{
           tabBarIcon: ({ color, focused, size }) => (
-            <Icon name="book"/>
+            <Icon size={styles.icon} name="book"/>
           ),
         }}
         name="Owned Books"
@@ -24,7 +24,7 @@ export default function Tabs() {
       <Tab.Screen
         options={{
           tabBarIcon: ({ color, focused, size }) => (
-            <Icon name="pluscircleo" />
+            <Icon size={styles.icon} name="pluscircleo" />
           ),
         }}
         name="Scan Book"
@@ -33,7 +33,7 @@ export default function Tabs() {
       <Tab.Screen
         options={{
           tabBarIcon: ({ color, focused, size }) => (
-            <Icon name="bars" />
+            <Icon size={styles.icon} name="bars" />
           ),
         }}
         name="To Read"
@@ -43,3 +43,6 @@ export default function Tabs() {
     </Tab.Navigator>
   );
 }
+const styles = StyleSheet.create({
+  icon:30
+})
