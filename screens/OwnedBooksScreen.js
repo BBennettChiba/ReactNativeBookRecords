@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View, StyleSheet, Button, Picker } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useUser, useUserUpdate } from "../contexts/UserContext";
 import BookInfo from "../components/BookInfo";
 import BookList from "../components/BookList";
 import { API, graphqlOperation } from "aws-amplify";
 import { deleteOwnedBook } from "../src/graphql/mutations";
+import sorts from '../utils/sorts'
 
 export default function OwnedBooksScreen({ navigation }) {
   const user = useUser();
   const setUser = useUserUpdate();
   const [pressedBook, setPressedBook] = useState(null);
+  const [selectedValue, setSelectedValue] = useState("title");
 
   async function removeBook(toDelete) {
     try {
@@ -27,27 +29,9 @@ export default function OwnedBooksScreen({ navigation }) {
     }
   }
 
-  function byAuthor(a, b) {
-    let aLastName = a.authors[0].split(' ')
-    aLastName = aLastName[aLastName.length - 1]
-    let bLastName = b.authors[0].split(' ')
-    bLastName = bLastName[bLastName.length - 1]
-    return aLastName > bLastName
-  }
-
-  function byTitle(a,b){
-    return a.title.replace(/the /i, '') > b.title.replace(/the /i, '')
-  }
-
-  function byRecent(a,b){
-    return a.createdAt > b.createdAt
-  }
-
-  function sort() {
+  function sort(type) {
     let books = user.ownedBooks.items;
-    // books = books.sort(byAuthor);
-    // books = books.sort(byTitle);
-    books = books.sort(byRecent);
+    books = books.sort(sorts[type]);
     setUser({
       ...user,
       ownedBooks: { items: books },
@@ -60,7 +44,21 @@ export default function OwnedBooksScreen({ navigation }) {
         <View>
           <View style={styles.top}>
             <Text style={{ fontSize: 20 }}>Books You Own!</Text>
-            <Button onPress={sort} title="Sort" />
+            <View style={styles.pickerView}>
+              <Text>Sort</Text>
+              <Picker
+                selectedValue={selectedValue}
+                style={styles.picker}
+                onValueChange={(itemValue) =>{
+                  setSelectedValue(itemValue)
+                  sort(itemValue)
+                }}
+              >
+                <Picker.Item label="By Author" value="author" />
+                <Picker.Item label="By Title" value="title" />
+                <Picker.Item label="By Recently Added" value="recent" />
+              </Picker>
+            </View>
           </View>
           <BookList
             books={user.ownedBooks?.items}
@@ -79,7 +77,21 @@ export default function OwnedBooksScreen({ navigation }) {
 const styles = StyleSheet.create({
   top: {
     display: "flex",
-    flexDirection: "row",
+    alignItems:"center",
+    // flexDirection: "row",
     justifyContent: "center",
+    borderBottomWidth: 3,
+    borderBottomColor: "black",
+    height: 50
+  },
+  picker: {
+    height: 30,
+    width: 200,
+  },
+  pickerView: {
+    // flex: 1,
+    alignItems: "center",
+    // justifyContent: "flex-start",
+    flexDirection: "row",
   },
 });
