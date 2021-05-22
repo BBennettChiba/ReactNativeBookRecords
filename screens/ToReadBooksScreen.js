@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, Button, View} from "react-native";
+import { Text, Button, View, StyleSheet} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AddBookToRead from "../components/AddBookToRead";
 import { useUser, useUserUpdate } from "../contexts/UserContext";
@@ -7,6 +7,7 @@ import BookInfo from "../components/BookInfo";
 import BookList from '../components/BookList'
 import {deleteBookToRead} from '../src/graphql/mutations'
 import { API, graphqlOperation } from "aws-amplify";
+import DropDown from '../components/DropDown'
 
 export default function ToReadBooksScreen({ navigation }) {
   const [addBookPressed, setAddBookPressed] = useState(false);
@@ -30,12 +31,21 @@ export default function ToReadBooksScreen({ navigation }) {
     }
   }
 
+  function setBooks(books){
+    setUser({
+      ...user,
+      booksToRead: { items: books },
+    });
+  }
 
   return (
     <SafeAreaView>
       {!addBookPressed && (
         <View>
-          <Text>To Read</Text>
+          <View style={styles.top}>
+            <Text style={{ fontSize: 20 }}>To Read!!!</Text>
+            <DropDown books={user?.booksToRead?.items} setBooks={setBooks}/>
+          </View>
           { pressedBook === null && <BookList removeBook={removeBook} books={books} setPressedBook={setPressedBook}/>}
           {pressedBook && <BookInfo book={pressedBook} setPressedBook={setPressedBook}/>}
           <Button title="Add Book" onPress={() => setAddBookPressed(true)} />
@@ -51,3 +61,15 @@ export default function ToReadBooksScreen({ navigation }) {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  top: {
+    display: "flex",
+    alignItems:"center",
+    // flexDirection: "row",
+    justifyContent: "center",
+    borderBottomWidth: 3,
+    borderBottomColor: "black",
+    height: 50
+  },
+});
