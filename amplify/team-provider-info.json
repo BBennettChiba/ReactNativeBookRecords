@@ -10,6 +10,11 @@
       "StackName": "amplify-reactnativebooks-dev-204007",
       "StackId": "arn:aws:cloudformation:ap-northeast-1:812753336504:stack/amplify-reactnativebooks-dev-204007/fc20d0a0-b3df-11eb-aa20-06c816ec4d35",
       "AmplifyAppId": "d1qb5km6k1xpsj"
+    },
+    "categories": {
+      "auth": {
+        "reactnativebooks3b172795": {}
+      }
     }
   }
 }
