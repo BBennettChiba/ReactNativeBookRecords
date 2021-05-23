@@ -12,7 +12,7 @@ Technology used:
   - Cognito for authentication 
   - DynamoDB with AppSync and a GraphQL API
 
-<img src="./assets/images/Book Details.jpg" width="30%"/>  <img src="./assets/Owned Books.jpg" width="30%"/> <img src="./assets/To Read.jpg" width="30%"/>
+<img src="./assets/Book Details.jpg" width="30%"/>  <img src="./assets/Owned Books.jpg" width="30%"/> <img src="./assets/To Read.jpg" width="30%"/>
 
 ## Installation
 clone this repository
