@@ -1,4 +1,4 @@
-export default sorts = {
+const sorts = {
     author:byAuthor,
     title:byTitle,
     recent:byRecent,
@@ -19,3 +19,5 @@ export default sorts = {
   function byRecent(a, b) {
     return a.createdAt > b.createdAt;
   }
+
+  export default sorts

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Text, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { API, graphqlOperation } from "aws-amplify";
 import { createOwnedBook } from "../src/graphql/mutations";
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,7 +8,7 @@ import { useUser, useUserUpdate } from "../contexts/UserContext";
 
 export default function BarcodeScanner() {
   const user = useUser();
-  const books = user.ownedBooks.items;
+  const books = user.ownedBooks;
   const setUser = useUserUpdate();
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);

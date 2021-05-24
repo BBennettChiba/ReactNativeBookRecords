@@ -1,7 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { getUser } from "../src/graphql/queries";
-import { API, graphqlOperation, Auth } from "aws-amplify";
-import { createUser } from "../src/graphql/mutations";
+import { getUser } from "../utils/Queries";
+import { Auth } from "aws-amplify";
 
 const UserContext = createContext(null);
 const UserContextUpdate = createContext(null);
@@ -27,8 +26,8 @@ export function UserContextProvider({ children }) {
       id = await Auth.currentUserInfo();
       username = id.username;
       id = id.id;
-      let userData;
-      userData = (await API.graphql(graphqlOperation(getUser, { id }))).data.getUser
+      let userData = await getUser("c8721468-828a-47a9-a673-137d43cfb062");
+      console.log(userData);
       if (userData === null) {
         userData = createNewUser(id, username);
       }
@@ -41,9 +40,11 @@ export function UserContextProvider({ children }) {
   async function createNewUser(id, username) {
     console.log("working?");
     let user = (
-      await API.graphql(graphqlOperation(createUser, {
-        input: { id, name:username },
-      }))
+      await API.graphql(
+        graphqlOperation(createUser, {
+          input: { id, name: username },
+        })
+      )
     ).data.createUser;
     return user;
   }

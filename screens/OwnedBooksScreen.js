@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useUser, useUserUpdate } from "../contexts/UserContext";
 import BookInfo from "../components/BookInfo";
 import BookList from "../components/BookList";
-import { API, graphqlOperation } from "aws-amplify";
 import { deleteOwnedBook } from "../src/graphql/mutations";
 import DropDown from '../components/DropDown'
 
@@ -19,10 +18,10 @@ export default function OwnedBooksScreen({ navigation }) {
       await API.graphql(
         graphqlOperation(deleteOwnedBook, { input: { id: toDelete.id } })
       );
-      let updated = user.ownedBooks.items.filter((a) => a.id !== toDelete.id);
+      let updated = user.ownedBooks.filter((a) => a.id !== toDelete.id);
       setUser((prev) => ({
         ...prev,
-        ownedBooks: { items: updated },
+        ownedBooks: updated,
       }));
     } catch (e) {
       console.log(`There was an error removing book `, e);
@@ -42,10 +41,10 @@ export default function OwnedBooksScreen({ navigation }) {
         <View>
           <View style={styles.top}>
             <Text style={{ fontSize: 20 }}>Books You Own!</Text>
-            <DropDown books={user?.ownedBooks?.items} setBooks={setBooks}/>
+            <DropDown books={user?.ownedBooks} setBooks={setBooks}/>
           </View>
           <BookList
-            books={user.ownedBooks?.items}
+            books={user.ownedBooks}
             setPressedBook={setPressedBook}
             removeBook={removeBook}
           />
@@ -62,7 +61,6 @@ const styles = StyleSheet.create({
   top: {
     display: "flex",
     alignItems:"center",
-    // flexDirection: "row",
     justifyContent: "center",
     borderBottomWidth: 3,
     borderBottomColor: "black",

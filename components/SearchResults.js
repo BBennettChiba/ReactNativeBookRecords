@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, Pressable, StyleSheet, Image } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
-import { API, graphqlOperation } from "aws-amplify";
 import { useUser, useUserUpdate } from "../contexts/UserContext";
 import {createBookToRead} from '../src/graphql/mutations'
 
@@ -16,9 +15,7 @@ export default function SearchResults({ item, setPressedBook }) {
     );
     userUpdate({
       ...user,
-      booksToRead: {
-        items: [...user.booksToRead.items, newBook.data.createBookToRead],
-      },
+      booksToRead: [...user.booksToRead, newBook.data.createBookToRead],
     });
   }
 

@@ -6,14 +6,13 @@ import { useUser, useUserUpdate } from "../contexts/UserContext";
 import BookInfo from "../components/BookInfo";
 import BookList from '../components/BookList'
 import {deleteBookToRead} from '../src/graphql/mutations'
-import { API, graphqlOperation } from "aws-amplify";
 import DropDown from '../components/DropDown'
 
 export default function ToReadBooksScreen({ navigation }) {
   const [addBookPressed, setAddBookPressed] = useState(false);
   const [pressedBook, setPressedBook] = useState(null)
   const user = useUser();
-  const books = user.booksToRead?.items;
+  const books = user.booksToRead;
   const setUser = useUserUpdate();
 
   async function removeBook(toDelete) {
@@ -44,7 +43,7 @@ export default function ToReadBooksScreen({ navigation }) {
         <View>
           <View style={styles.top}>
             <Text style={{ fontSize: 20 }}>To Read!!!</Text>
-            <DropDown books={user?.booksToRead?.items} setBooks={setBooks}/>
+            <DropDown books={user?.booksToRead} setBooks={setBooks}/>
           </View>
           { pressedBook === null && <BookList removeBook={removeBook} books={books} setPressedBook={setPressedBook}/>}
           {pressedBook && <BookInfo book={pressedBook} setPressedBook={setPressedBook}/>}
