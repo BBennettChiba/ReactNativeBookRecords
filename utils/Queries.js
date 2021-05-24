@@ -7,27 +7,46 @@ export async function getUser(id) {
         url: "http://localhost:4000/graphql",
         method: "post",
         data: {
-          query: `{
-            getUser(id:"c8721468-828a-47a9-a673-137d43cfb062"){
-              name
-              ownedBooks{
-                title
-                isbn
-                publisher
-                categories
-                authors
-              }
-              booksToRead{
-                title
-              }
-            }
-          }`,
+          query: getUserQuery(id),
         },
       })
-    ).data.data.getUser
-    console.log(fetch);
+    ).data.data.getUser;
     return fetch;
   } catch (e) {
     console.log(e);
   }
 }
+
+const getUserQuery = (id) => `{
+    getUser(id:"${id}"){
+      name
+      ownedBooks{
+        title
+        isbn
+        coverURL
+        language
+        pageCount
+        publisher
+        publishedDate
+        description
+        categories
+        authors
+        createdAt
+        updatedAt
+      }
+      booksToRead{
+        title
+        isbn
+        coverURL
+        language
+        pageCount
+        publisher
+        publishedDate
+        description
+        categories
+        authors
+        createdAt
+        updatedAt
+      }
+    }
+  }`;

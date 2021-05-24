@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { getUser } from "../utils/Queries";
+import {createUser} from '../utils/Mutations'
 import { Auth } from "aws-amplify";
 
 const UserContext = createContext(null);
@@ -26,27 +27,14 @@ export function UserContextProvider({ children }) {
       id = await Auth.currentUserInfo();
       username = id.username;
       id = id.id;
-      let userData = await getUser("c8721468-828a-47a9-a673-137d43cfb062");
-      console.log(userData);
+      let userData = await getUser(id);
       if (userData === null) {
-        userData = createNewUser(id, username);
+        userData = (await createUser(id, username));
       }
       setUser(userData);
     } catch (err) {
       console.log("error fetching books", err);
     }
-  }
-
-  async function createNewUser(id, username) {
-    console.log("working?");
-    let user = (
-      await API.graphql(
-        graphqlOperation(createUser, {
-          input: { id, name: username },
-        })
-      )
-    ).data.createUser;
-    return user;
   }
 
   return (
