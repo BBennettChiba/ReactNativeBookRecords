@@ -33,6 +33,8 @@ export default function AddBookToRead() {
         .then((result) => {
           result = result.items.filter(
             (a) =>
+              a.volumeInfo.publisher &&
+              a.volumeInfo.categories &&
               a.volumeInfo.imageLinks &&
               a.volumeInfo.industryIdentifiers &&
               a.volumeInfo.industryIdentifiers.some(
@@ -52,6 +54,8 @@ export default function AddBookToRead() {
             publishedDate: a.volumeInfo.publishedDate,
             publisher: a.volumeInfo.publisher,
             description: a.volumeInfo.description,
+            categories: a.volumeInfo.categories,
+            publisher: a.volumeInfo.publisher
           }));
           setSearchResult(result);
         });

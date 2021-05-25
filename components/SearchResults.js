@@ -2,20 +2,17 @@ import React from "react";
 import { View, Text, Pressable, StyleSheet, Image } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import { useUser, useUserUpdate } from "../contexts/UserContext";
-import {createBookToRead} from '../src/graphql/mutations'
+import {createBookToRead} from '../utils/Mutations'
 
 export default function SearchResults({ item, setPressedBook }) {
   const user = useUser();
   const userUpdate = useUserUpdate();
+
   async function handleAddBook(book) {
-    let newBook = await API.graphql(
-      graphqlOperation(createBookToRead, {
-        input: { ...book, userID: user.id },
-      })
-    );
+    let newBook = await createBookToRead({...book, userID: user.id})
     userUpdate({
       ...user,
-      booksToRead: [...user.booksToRead, newBook.data.createBookToRead],
+      booksToRead: [...user.booksToRead, newBook],
     });
   }
 

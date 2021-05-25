@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { createOwnedBook } from "../src/graphql/mutations";
+import { createOwnedBook } from "../utils/Mutations";
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useUser, useUserUpdate } from "../contexts/UserContext";
@@ -84,9 +84,7 @@ export default function BarcodeScanner() {
       return;
     }
     try {
-      const newBook = await API.graphql(
-        graphqlOperation(createOwnedBook, { input: book })
-      );
+      const newBook = await createOwnedBook({ input: book })
       setUser({
         ...user,
         ownedBooks: { items: [...books, newBook.data.createOwnedBook] },

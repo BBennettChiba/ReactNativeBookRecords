@@ -19,8 +19,10 @@ export async function getUser(id) {
 
 const getUserQuery = (id) => `{
     getUser(id:"${id}"){
+      id
       name
       ownedBooks{
+        id
         title
         isbn
         coverURL
@@ -35,6 +37,7 @@ const getUserQuery = (id) => `{
         updatedAt
       }
       booksToRead{
+        id
         title
         isbn
         coverURL
