@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Pressable, StyleSheet, Image } from "react-native";
+import { View, Text, Pressable, StyleSheet, Image, Alert } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import { useUser, useUserUpdate } from "../contexts/UserContext";
 import {createBookToRead} from '../utils/Mutations'
@@ -14,6 +14,9 @@ export default function SearchResults({ item, setPressedBook }) {
       ...user,
       booksToRead: [...user.booksToRead, newBook],
     });
+    Alert.alert(
+      `${book.title}`
+    )
   }
 
   return (

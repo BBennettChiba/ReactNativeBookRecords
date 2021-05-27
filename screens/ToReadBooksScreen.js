@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Text, Button, View, StyleSheet } from "react-native";
+import { Text, Button, View, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AddBookToRead from "../components/AddBookToRead";
 import { useUser, useUserUpdate } from "../contexts/UserContext";
 import BookInfo from "../components/BookInfo";
 import BookList from "../components/BookList";
-import { deleteBookToRead } from "../utils/mutations";
+import { deleteBookToRead } from "../utils/Mutations";
 import DropDown from "../components/DropDown";
 
 export default function ToReadBooksScreen({ navigation }) {
@@ -31,35 +31,40 @@ export default function ToReadBooksScreen({ navigation }) {
   function setBooks(books) {
     setUser({
       ...user,
-      booksToRead: { items: books },
+      booksToRead: books,
     });
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       {!addBookPressed && (
-        <View>
+        <View style={{ flex: 1 }}>
           <View style={styles.top}>
             <Text style={{ fontSize: 20 }}>To Read!!!</Text>
             <DropDown books={user?.booksToRead} setBooks={setBooks} />
           </View>
           {pressedBook === null && (
-            <BookList
-              removeBook={removeBook}
-              books={books}
-              setPressedBook={setPressedBook}
-            />
+            <View style={{ flex: 1 }}>
+              <BookList
+                removeBook={removeBook}
+                books={books}
+                setPressedBook={setPressedBook}
+              />
+              <Button
+                style={styles.button}
+                title="Add Book"
+                onPress={() => setAddBookPressed(true)}
+              />
+            </View>
           )}
           {pressedBook && (
             <BookInfo book={pressedBook} setPressedBook={setPressedBook} />
           )}
-          <Button title="Add Book" onPress={() => setAddBookPressed(true)} />
         </View>
       )}
       {addBookPressed && (
         <View>
           <AddBookToRead />
-
           <Button title="Close" onPress={() => setAddBookPressed(false)} />
         </View>
       )}
@@ -77,4 +82,9 @@ const styles = StyleSheet.create({
     borderBottomColor: "black",
     height: 50,
   },
+  button: {
+    bottom: 50,
+    position: "absolute",
+  },
 });
+

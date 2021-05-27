@@ -8,6 +8,7 @@ export default function BookList({ books, setPressedBook, removeBook }) {
     <FlatList
       contentContainerStyle={{ paddingBottom: 30 }}
       data={books}
+      keyExtractor={(item) => item.title}
       renderItem={({ item }) => (
         <View style={styles.bookBox}>
           <Book book={item} key={item.id} setPressedBook={setPressedBook} />
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     right: 5,
-    alignSelf:"center"
+    alignSelf: "center",
   },
   container: {
     marginBottom: 20,

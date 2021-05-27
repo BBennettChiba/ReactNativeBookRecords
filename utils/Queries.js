@@ -1,10 +1,13 @@
 import axios from "axios";
+import {LOCAL} from "@env"
+
+const local = LOCAL
 
 export async function getUser(id) {
   try {
     let fetch = (
       await axios({
-        url: "http://localhost:4000/graphql",
+        url: local,
         method: "post",
         data: {
           query: getUserQuery(id),

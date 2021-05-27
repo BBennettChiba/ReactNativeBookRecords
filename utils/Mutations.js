@@ -1,10 +1,13 @@
 import axios from "axios";
+import {LOCAL} from "@env"
+
+const local = LOCAL
 
 export async function createUser(id, username) {
   try {
     let fetch = (
       await axios({
-        url: "http://localhost:4000/graphql",
+        url: local,
         method: "post",
         data: {
           query: createUserQuery,
@@ -22,7 +25,7 @@ export async function createBookToRead(input) {
   try {
     let fetch = (
       await axios({
-        url: "http://localhost:4000/graphql",
+        url: local,
         method: "post",
         data: {
           query: createBookToReadQuery,
@@ -39,7 +42,7 @@ export async function createBookToRead(input) {
 export async function deleteBookToRead(input) {
   try {
     let fetch = await axios({
-      url: "http://localhost:4000/graphql",
+      url: local,
       method: "post",
       data: {
         query: deleteBookToReadQuery,
@@ -54,15 +57,15 @@ export async function deleteBookToRead(input) {
 
 export async function createOwnedBook(input) {
   try {
-    let fetch = await axios({
-      url: "http://localhost:4000/graphql",
+    let fetch = (await axios({
+      url: local,
       method: "post",
       data: {
-        query: deleteBookToReadQuery,
-        variables: { input: input },
+        query: createOwnedBookQuery,
+        variables: {input:input},
       },
-    });
-    return;
+    })).data.data.createOwnedBook
+    return fetch
   } catch (e) {
     console.log(e);
   }
@@ -72,7 +75,7 @@ export async function createOwnedBook(input) {
 export async function deleteOwnedBook(input) {
   try {
     let fetch = await axios({
-      url: "http://localhost:4000/graphql",
+      url: local,
       method: "post",
       data: {
         query: deleteOwnedBookQuery,
@@ -92,6 +95,8 @@ const createUserQuery = `
             createdAt
             updatedAt
             id
+            ownedBooks
+            booksToRead
         }
     }
   `;
@@ -121,7 +126,27 @@ const deleteBookToReadQuery = `
     }
   `;
 const deleteOwnedBookQuery = `
-    mutation deleteOwnedBook($input: deleteBookToReadInput!){
+    mutation deleteOwnedBook($input: deleteOwnedBookInput!){
       deleteOwnedBook(input: $input)
     }
   `;
+
+  const createOwnedBookQuery = `
+  mutation createOwnedBook($input: createOwnedBookInput!){
+      createOwnedBook(input: $input){
+        id
+        title
+        isbn
+        coverURL
+        language
+        pageCount
+        publisher
+        publishedDate
+        description
+        categories
+        authors
+        createdAt
+        updatedAt
+      }
+  }
+`;

@@ -7,6 +7,7 @@ import BookList from "../components/BookList";
 import { deleteOwnedBook } from "../utils/Mutations";
 import DropDown from "../components/DropDown";
 
+
 export default function OwnedBooksScreen({ navigation }) {
   const user = useUser();
   const setUser = useUserUpdate();
@@ -14,12 +15,12 @@ export default function OwnedBooksScreen({ navigation }) {
 
   async function removeBook(toDelete) {
     try {
-      await deleteOwnedBook({ input: { id: toDelete.id } });
+      await deleteOwnedBook({ id: toDelete.id, userID: user.id });
       let updated = user.ownedBooks.filter((a) => a.id !== toDelete.id);
-      setUser((prev) => ({
-        ...prev,
+      setUser({
+        ...user,
         ownedBooks: updated,
-      }));
+      });
     } catch (e) {
       console.log(`There was an error removing book `, e);
     }
@@ -28,7 +29,7 @@ export default function OwnedBooksScreen({ navigation }) {
   function setBooks(books) {
     setUser({
       ...user,
-      ownedBooks: { items: books },
+      ownedBooks: books,
     });
   }
 
@@ -41,7 +42,7 @@ export default function OwnedBooksScreen({ navigation }) {
             <DropDown books={user?.ownedBooks} setBooks={setBooks} />
           </View>
           <BookList
-            books={user.ownedBooks}
+            books={user?.ownedBooks}
             setPressedBook={setPressedBook}
             removeBook={removeBook}
           />

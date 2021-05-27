@@ -8,7 +8,6 @@ import { useUser, useUserUpdate } from "../contexts/UserContext";
 
 export default function BarcodeScanner() {
   const user = useUser();
-  const books = user.ownedBooks;
   const setUser = useUserUpdate();
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -84,10 +83,10 @@ export default function BarcodeScanner() {
       return;
     }
     try {
-      const newBook = await createOwnedBook({ input: book })
+      const newBook = await createOwnedBook({... book, userID: user.id})
       setUser({
         ...user,
-        ownedBooks: { items: [...books, newBook.data.createOwnedBook] },
+        ownedBooks: [...user.ownedBooks, newBook],
       });
     } catch (err) {
       console.log("error creating book:", err);
